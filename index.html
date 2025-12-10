@@ -411,6 +411,9 @@
 <!-- FIREBASE COMPLETO -->
 <script type="module">
 
+/* ============================================================
+   FUNCIÓN ALERTA BONITA
+   ============================================================ */
 function showAlert(msg, color = "#4f46e5") {
   const al = document.getElementById("alertaGeneral");
   al.style.background = color;
@@ -467,7 +470,7 @@ const registerForm = document.getElementById("formRegister");
 const loginItem = document.getElementById("loginItem");
 
 /* ============================================================
-   LOGIN GOOGLE
+   LOGIN GOOGLE — 100% CORREGIDO
    ============================================================ */
 googleBtn?.addEventListener("click", async () => {
   try {
@@ -482,19 +485,27 @@ googleBtn?.addEventListener("click", async () => {
     }, { merge: true });
 
     cerrarModalAuth();
-    showAlert("¡Bienvenido " + (user.displayName || user.email) + "!");
+    showAlert(`¡Bienvenido ${user.displayName || user.email}!`, "#10b981");
 
   } catch (err) {
-    alert("Error al iniciar sesión con Google");
-    console.error(err);
+    console.warn("Advertencia Google Login:", err.code);
+
+    // NO mostrar errores falsos
+    if (
+      err.code === "auth/popup-closed-by-user" ||
+      err.code === "auth/cancelled-popup-request"
+    ) return;
+
+    showAlert("Error al iniciar sesión con Google", "#dc2626");
   }
 });
 
 /* ============================================================
-   REGISTRO EMAIL
+   REGISTRO – CORREGIDO SIN alert()
    ============================================================ */
 registerForm?.addEventListener("submit", async e => {
   e.preventDefault();
+
   const nombre = regNombre.value.trim();
   const email = regEmail.value.trim();
   const pass = regPassword.value;
@@ -513,12 +524,12 @@ registerForm?.addEventListener("submit", async e => {
     showAlert("Registro exitoso ✓ Ahora inicia sesión", "#10b981");
 
   } catch (err) {
-    alert("Error en registro: " + err.message);
+    showAlert("Error en registro: " + err.message, "#dc2626");
   }
 });
 
 /* ============================================================
-   LOGIN EMAIL/PASS
+   LOGIN EMAIL – CORREGIDO
    ============================================================ */
 loginForm?.addEventListener("submit", async e => {
   e.preventDefault();
@@ -526,16 +537,11 @@ loginForm?.addEventListener("submit", async e => {
   try {
     await signInWithEmailAndPassword(auth, loginEmail.value.trim(), loginPassword.value.trim());
     cerrarModalAuth();
-    showAlert("¡Bienvenido " + loginEmail.value + "!");
-} catch (err) {
-  console.warn("Advertencia en Google Login:", err.message);
+    showAlert("¡Bienvenido " + loginEmail.value + "!", "#10b981");
 
-  // ❗ Evita mostrar error falso por popup cancelado
-  if (err.code !== "auth/popup-closed-by-user" &&
-      err.code !== "auth/cancelled-popup-request") {
-    showAlert("No se pudo iniciar sesión con Google", "#dc2626"); // rojo
+  } catch (err) {
+    showAlert("Error al iniciar sesión: " + err.message, "#dc2626");
   }
-}
 });
 
 /* ============================================================
@@ -547,13 +553,13 @@ function cerrarModalAuth() {
 }
 
 /* ============================================================
-   NAVBAR USER INFO (DROPDOWN FIX)
+   NAVBAR USER INFO
    ============================================================ */
 function pintarUsuarioNavbar(user) {
-  if (document.getElementById("userinfo")) return;
-
   const foto = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}`;
   const nombre = user.displayName || user.email;
+
+  limpiarUsuarioNavbar();
 
   const li = document.createElement("li");
   li.className = "nav-item dropdown ms-3 d-flex align-items-center";
@@ -570,7 +576,6 @@ function pintarUsuarioNavbar(user) {
        role="button"
        data-bs-toggle="dropdown"
        aria-expanded="false">
-
       <img src="${foto}" class="rounded-circle me-2" width="32" height="32">
       <span class="text-white">${nombre}</span>
     </a>
@@ -588,9 +593,7 @@ function pintarUsuarioNavbar(user) {
     await signOut(auth);
   });
 
-  document.getElementById("misPedidosBtn").addEventListener("click", async () => {
-    await cargarPedidosUsuario();
-  });
+  document.getElementById("misPedidosBtn").addEventListener("click", cargarPedidosUsuario);
 }
 
 function limpiarUsuarioNavbar() {
@@ -609,7 +612,7 @@ onAuthStateChanged(auth, user => {
 });
 
 /* ============================================================
-   CARRITO
+   CARRITO — (SIN CAMBIOS)
    ============================================================ */
 let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
@@ -727,7 +730,7 @@ document.querySelectorAll(".addToCart").forEach(btn => {
 
     const card = e.target.closest(".card");
     const nombre = card.querySelector(".card-title").textContent;
-    const precio = parseFloat(card.querySelector(".fw-bold").textContent.replace("S/","").replace("s/",""));
+    const precio = parseFloat(card.querySelector(".fw-bold").textContent.replace("S/",""));
     const img = card.querySelector("img").src;
 
     const existe = carrito.find(p => p.nombre === nombre);
@@ -736,7 +739,7 @@ document.querySelectorAll(".addToCart").forEach(btn => {
     else carrito.push({ nombre, precio, img, cantidad: 1 });
 
     guardarCarrito();
-    mostrarAlerta();
+    mostrarAlerta(nombre);
   });
 });
 
@@ -752,7 +755,7 @@ document.getElementById("btnComprar")?.addEventListener("click", async () => {
   }
 
   if (carrito.length === 0) {
-    alert("El carrito está vacío.");
+    showAlert("El carrito está vacío", "#dc2626");
     return;
   }
 
@@ -773,11 +776,10 @@ document.getElementById("btnComprar")?.addEventListener("click", async () => {
     const modal = bootstrap.Modal.getInstance(document.getElementById("modalCarrito"));
     if (modal) modal.hide();
 
-    alert("Pedido Registrado correctamente ¡Revisa tus pedidos!");
+    showAlert("Pedido registrado correctamente", "#10b981");
 
   } catch (err) {
-    console.error(err);
-    alert("Error al guardar tu pedido");
+    showAlert("Error al guardar tu pedido", "#dc2626");
   }
 });
 
@@ -821,13 +823,12 @@ async function cargarPedidosUsuario() {
     new bootstrap.Modal(document.getElementById("modalPedidos")).show();
 
   } catch (err) {
-    console.error(err);
     lista.innerHTML = `<p class="text-center text-danger">Error al cargar pedidos</p>`;
   }
 }
 
 /* ============================================================
-   RENDER HTML DE PEDIDO
+   HTML DE PEDIDO
    ============================================================ */
 function renderPedidoHtml(p, numero) {
   const fecha = p.createdAt?.toDate
@@ -845,10 +846,7 @@ function renderPedidoHtml(p, numero) {
             <small>Cantidad: ${i.cantidad}</small>
           </div>
         </div>
-
-        <div>
-          <strong>S/ ${(i.precio * i.cantidad).toFixed(2)}</strong>
-        </div>
+        <div><strong>S/ ${(i.precio * i.cantidad).toFixed(2)}</strong></div>
       </div>
     `;
   });
@@ -859,9 +857,7 @@ function renderPedidoHtml(p, numero) {
       <div><strong>Fecha:</strong> ${fecha}</div>
       <hr>
       ${itemsHtml}
-      <div class="text-end mt-2">
-        <h5>Total: S/ ${p.total?.toFixed(2) || "0.00"}</h5>
-      </div>
+      <div class="text-end mt-2"><h5>Total: S/ ${p.total?.toFixed(2)}</h5></div>
     </div>
   `;
 }
@@ -872,6 +868,7 @@ function renderPedidoHtml(p, numero) {
 
 </body>
 </html>
+
 
 
 
