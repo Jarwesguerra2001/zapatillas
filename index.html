@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>tienda online </title>
+  <title>Tienda de Zapatilaz</title>
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
@@ -86,15 +86,15 @@
 <!-- HEADER -->
 <header class="bg-primary text-white text-center py-5">
   <div class="container">
-    <h1 class="display-4">Bienvenido a tienda online</h1>
-    <p class="lead">Tu tienda de confianza al mejor precio</p>
+    <h1 class="display-4">Bienvenido a Tu Tienda de Zapatillas</h1>
+    <p class="lead">comprar es lo mejor </p>
   </div>
 </header>
 
 <!-- PRODUCTOS -->
 <section class="py-5">
   <div class="container">
-    <h2 class="text-center mb-4">NUESTROS PRODUCTOS</h2>
+    <h2 class="text-center mb-4">NUESTROS PRODUCTOS A BUEN PRECIO</h2>
     <div class="row g-4">
 
       <!-- PRODUCTO 1 -->
@@ -313,48 +313,56 @@
 <!-- BOOTSTRAP JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- FIREBASE -->
-
+<!-- FIREBASE COMPLETO -->
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+/* ============================================================
+   IMPORTS FIREBASE (VERSION 12.6.0) — FUNCIONA EN GITHUB PAGES
+   ============================================================ */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
 import {
   getAuth, GoogleAuthProvider, signInWithPopup,
   signOut, onAuthStateChanged,
   createUserWithEmailAndPassword, signInWithEmailAndPassword
-} from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
 import {
   getFirestore, doc, setDoc, addDoc,
-  collection, getDocs, query, where, orderBy,
+  collection, getDocs, query, where,
   serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
-/* ------------ 🔥 CONFIGURACIÓN FIREBASE ADAPTADA ------------ */
+/* ============================================================
+   CONFIG FIREBASE — 100% ADAPTADO A TU DOMINIO
+   ============================================================ */
 const firebaseConfig = {
   apiKey: "AIzaSyDBM97jFiC31LlofM_YOJY2l20YqAkxYWc",
-  authDomain: "jarwesguerra2001.github.io",
+  authDomain: "jarwesguerra2001.github.io",   // 🟢 ADAPTADO
   projectId: "casa-zapatillas",
   storageBucket: "casa-zapatillas.firebasestorage.app",
   messagingSenderId: "912547598774",
   appId: "1:912547598774:web:28f3708a71561f3c62b117",
   measurementId: "G-TGGF3N8RTD"
 };
-/* -------------------------------------------------------------- */
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+
 const provider = new GoogleAuthProvider();
 provider.setCustomParameters({ prompt: "select_account" });
 
-/* ELEMENTOS */
+/* ============================================================
+   ELEMENTOS
+   ============================================================ */
 const googleBtn = document.getElementById("googleLogin");
 const loginForm = document.getElementById("formlogin");
 const registerForm = document.getElementById("formRegister");
 const loginItem = document.getElementById("loginItem");
 
-/* LOGIN GOOGLE */
-googleBtn.addEventListener("click", async () => {
+/* ============================================================
+   LOGIN GOOGLE
+   ============================================================ */
+googleBtn?.addEventListener("click", async () => {
   try {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
@@ -375,8 +383,10 @@ googleBtn.addEventListener("click", async () => {
   }
 });
 
-/* REGISTRO */
-registerForm.addEventListener("submit", async e => {
+/* ============================================================
+   REGISTRO EMAIL
+   ============================================================ */
+registerForm?.addEventListener("submit", async e => {
   e.preventDefault();
   const nombre = regNombre.value.trim();
   const email = regEmail.value.trim();
@@ -400,8 +410,10 @@ registerForm.addEventListener("submit", async e => {
   }
 });
 
-/* LOGIN EMAIL */
-loginForm.addEventListener("submit", async e => {
+/* ============================================================
+   LOGIN EMAIL/PASS
+   ============================================================ */
+loginForm?.addEventListener("submit", async e => {
   e.preventDefault();
 
   try {
@@ -414,14 +426,19 @@ loginForm.addEventListener("submit", async e => {
   }
 });
 
-/* NAVBAR CUENTA */
-function cerrarModalAuth(){
+/* ============================================================
+   MODAL AUTH
+   ============================================================ */
+function cerrarModalAuth() {
   const modal = bootstrap.Modal.getInstance(document.getElementById("authModal"));
-  if(modal) modal.hide();
+  if (modal) modal.hide();
 }
 
-function pintarUsuarioNavbar(user){
-  if(document.getElementById("userinfo")) return;
+/* ============================================================
+   NAVBAR USER INFO
+   ============================================================ */
+function pintarUsuarioNavbar(user) {
+  if (document.getElementById("userinfo")) return;
 
   const foto = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}`;
   const nombre = user.displayName || user.email;
@@ -459,50 +476,55 @@ function pintarUsuarioNavbar(user){
   });
 }
 
-function limpiarUsuarioNavbar(){
+function limpiarUsuarioNavbar() {
   const info = document.getElementById("userinfo");
-  if(info) info.remove();
+  if (info) info.remove();
 }
 
 onAuthStateChanged(auth, user => {
-  if(user){
+  if (user) {
     pintarUsuarioNavbar(user);
-    loginItem.classList.add("d-none");
+    loginItem?.classList.add("d-none");
   } else {
     limpiarUsuarioNavbar();
-    loginItem.classList.remove("d-none");
+    loginItem?.classList.remove("d-none");
   }
 });
 
-/* ---------------- CARRITO ---------------- */
+/* ============================================================
+   CARRITO
+   ============================================================ */
 let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
-function mostrarAlerta(){
+function mostrarAlerta() {
   const al = document.getElementById("alertaAgregado");
+  if (!al) return;
   al.style.display = "block";
-  setTimeout(()=> al.style.display = "none", 1600);
+  setTimeout(() => al.style.display = "none", 1600);
 }
 
-function guardarCarrito(){
+function guardarCarrito() {
   localStorage.setItem("carrito", JSON.stringify(carrito));
   actualizarContador();
 }
 
-function actualizarContador(){
+function actualizarContador() {
   const c = document.getElementById("contadorCarrito");
-  if(!c) return;
-  c.textContent = carrito.reduce((acc, i)=> acc + i.cantidad, 0);
+  if (!c) return;
+  c.textContent = carrito.reduce((acc, i) => acc + i.cantidad, 0);
 }
 
-function renderCarrito(){
+function renderCarrito() {
   const lista = document.getElementById("listaCarrito");
   const totalSpan = document.getElementById("totalCarrito");
+
+  if (!lista || !totalSpan) return;
 
   lista.innerHTML = "";
   let total = 0;
 
-  if(carrito.length === 0){
-    lista.innerHTML = '<p class="text-center">Tu carrito está vacío.</p>';
+  if (carrito.length === 0) {
+    lista.innerHTML = `<p class="text-center">Tu carrito está vacío.</p>`;
     totalSpan.textContent = "S/ 0.00";
     return;
   }
@@ -516,7 +538,7 @@ function renderCarrito(){
     </div>
   `;
 
-  carrito.forEach((item, index)=>{
+  carrito.forEach((item, index) => {
     const subtotal = item.precio * item.cantidad;
     total += subtotal;
 
@@ -529,9 +551,7 @@ function renderCarrito(){
         <div>${item.nombre}</div>
       </div>
 
-      <div class="col-2">
-        S/ ${item.precio.toFixed(2)}
-      </div>
+      <div class="col-2">S/ ${item.precio.toFixed(2)}</div>
 
       <div class="col-3 d-flex align-items-center">
         <button class="btn btn-sm btn-outline-secondary me-2 btn-restar">-</button>
@@ -539,18 +559,16 @@ function renderCarrito(){
         <button class="btn btn-sm btn-outline-secondary ms-2 btn-sumar">+</button>
       </div>
 
-      <div class="col-3 fw-bold">
-        S/ ${subtotal.toFixed(2)}
-      </div>
+      <div class="col-3 fw-bold">S/ ${subtotal.toFixed(2)}</div>
 
       <div class="col-12 text-end mt-2">
         <button class="btn btn-sm btn-danger btn-eliminar"><i class="bi bi-trash"></i></button>
       </div>
     `;
 
-    row.querySelector(".btn-restar").addEventListener("click", ()=> cambiarCantidad(index, -1));
-    row.querySelector(".btn-sumar").addEventListener("click", ()=> cambiarCantidad(index, 1));
-    row.querySelector(".btn-eliminar").addEventListener("click", ()=> eliminarItem(index));
+    row.querySelector(".btn-restar").addEventListener("click", () => cambiarCantidad(index, -1));
+    row.querySelector(".btn-sumar").addEventListener("click", () => cambiarCantidad(index, 1));
+    row.querySelector(".btn-eliminar").addEventListener("click", () => eliminarItem(index));
 
     lista.appendChild(row);
   });
@@ -558,43 +576,43 @@ function renderCarrito(){
   totalSpan.textContent = `S/ ${total.toFixed(2)}`;
 }
 
-function cambiarCantidad(index, value){
+function cambiarCantidad(index, value) {
   carrito[index].cantidad += value;
-  if(carrito[index].cantidad <= 0) carrito.splice(index, 1);
+  if (carrito[index].cantidad <= 0) carrito.splice(index, 1);
   guardarCarrito();
   renderCarrito();
 }
 
-function eliminarItem(index){
+function eliminarItem(index) {
   carrito.splice(index, 1);
   guardarCarrito();
   renderCarrito();
 }
 
 /* Abrir carrito */
-document.addEventListener("click", e=>{
-  if(e.target.closest("#btnCarritoIcono")){
+document.addEventListener("click", e => {
+  if (e.target.closest("#btnCarritoIcono")) {
     renderCarrito();
     new bootstrap.Modal(document.getElementById("modalCarrito")).show();
   }
 });
 
 /* Agregar productos */
-document.querySelectorAll(".addToCart").forEach(btn=>{
-  btn.addEventListener("click", e=>{
-    if(!document.getElementById("userinfo")){
+document.querySelectorAll(".addToCart").forEach(btn => {
+  btn.addEventListener("click", e => {
+    if (!auth.currentUser) {
       new bootstrap.Modal(document.getElementById("authModal")).show();
       return;
     }
 
     const card = e.target.closest(".card");
     const nombre = card.querySelector(".card-title").textContent;
-    const precio = parseFloat(card.querySelector(".fw-bold").textContent.replace("s/","").replace("S/",""));
+    const precio = parseFloat(card.querySelector(".fw-bold").textContent.replace("S/","").replace("s/",""));
     const img = card.querySelector("img").src;
 
-    const existe = carrito.find(p=> p.nombre === nombre);
+    const existe = carrito.find(p => p.nombre === nombre);
 
-    if(existe) existe.cantidad++;
+    if (existe) existe.cantidad++;
     else carrito.push({ nombre, precio, img, cantidad: 1 });
 
     guardarCarrito();
@@ -603,27 +621,28 @@ document.querySelectorAll(".addToCart").forEach(btn=>{
 });
 
 actualizarContador();
-renderCarrito();
 
-/* ---------------- HACER PEDIDO ---------------- */
-document.getElementById("btnComprar").addEventListener("click", async ()=>{
-  if(!auth.currentUser){
+/* ============================================================
+   HACER PEDIDO
+   ============================================================ */
+document.getElementById("btnComprar")?.addEventListener("click", async () => {
+  if (!auth.currentUser) {
     new bootstrap.Modal(document.getElementById("authModal")).show();
     return;
   }
 
-  if(carrito.length === 0){
+  if (carrito.length === 0) {
     alert("El carrito está vacío.");
     return;
   }
 
-  try{
+  try {
     const uid = auth.currentUser.uid;
 
     await addDoc(collection(db, "Pedidos"), {
       uid,
       items: carrito,
-      total: carrito.reduce((acc,i)=> acc+i.precio*i.cantidad, 0),
+      total: carrito.reduce((acc, i) => acc + i.precio * i.cantidad, 0),
       createdAt: serverTimestamp()
     });
 
@@ -632,20 +651,22 @@ document.getElementById("btnComprar").addEventListener("click", async ()=>{
     renderCarrito();
 
     const modal = bootstrap.Modal.getInstance(document.getElementById("modalCarrito"));
-    if(modal) modal.hide();
+    if (modal) modal.hide();
 
     alert("Pedido Registrado correctamente ¡Revisa tus pedidos!");
 
-  } catch(err){
+  } catch (err) {
     console.error(err);
     alert("Error al guardar tu pedido");
   }
 });
 
-/* ---------------- MIS PEDIDOS ---------------- */
-async function cargarPedidosUsuario(){
+/* ============================================================
+   MIS PEDIDOS
+   ============================================================ */
+async function cargarPedidosUsuario() {
   const user = auth.currentUser;
-  if(!user){
+  if (!user) {
     new bootstrap.Modal(document.getElementById("authModal")).show();
     return;
   }
@@ -653,46 +674,48 @@ async function cargarPedidosUsuario(){
   const lista = document.getElementById("listaPedidos");
   lista.innerHTML = `<p class="text-center">Cargando pedidos...</p>`;
 
-  try{
+  try {
     const q = query(
-      collection(db,"Pedidos"),
-      where("uid","==", user.uid)
+      collection(db, "Pedidos"),
+      where("uid", "==", user.uid)
     );
 
     const snap = await getDocs(q);
     const pedidos = [];
     snap.forEach(doc => pedidos.push({ id: doc.id, ...doc.data() }));
 
-    pedidos.sort((a,b)=>{
+    pedidos.sort((a, b) => {
       const fa = a.createdAt?.toMillis ? a.createdAt.toMillis() : 0;
       const fb = b.createdAt?.toMillis ? b.createdAt.toMillis() : 0;
       return fb - fa;
     });
 
-    if(pedidos.length === 0){
+    if (pedidos.length === 0) {
       lista.innerHTML = `<p class="text-center">No tienes pedidos.</p>`;
     } else {
       lista.innerHTML = pedidos
-        .map((p,index) => renderPedidoHtml(p, index+1))
+        .map((p, index) => renderPedidoHtml(p, index + 1))
         .join("");
     }
 
     new bootstrap.Modal(document.getElementById("modalPedidos")).show();
 
-  } catch(err){
+  } catch (err) {
     console.error(err);
     lista.innerHTML = `<p class="text-center text-danger">Error al cargar pedidos</p>`;
   }
 }
 
-/* ---------------- RENDER PEDIDO ---------------- */
-function renderPedidoHtml(p, numero){
+/* ============================================================
+   RENDER HTML DE PEDIDO
+   ============================================================ */
+function renderPedidoHtml(p, numero) {
   const fecha = p.createdAt?.toDate
     ? p.createdAt.toDate().toLocaleString()
     : "Sin fecha";
 
   let itemsHtml = "";
-  (p.items || []).forEach(i=>{
+  (p.items || []).forEach(i => {
     itemsHtml += `
       <div class="pedido-item">
         <div class="d-flex align-items-center">
@@ -725,7 +748,9 @@ function renderPedidoHtml(p, numero){
 </script>
 
 
+
 </body>
 </html>
+
 
 
