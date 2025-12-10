@@ -446,31 +446,16 @@ function showAlert(msg, color = "#4f46e5") {
   al.textContent = msg;
 
   al.classList.add("show");
-
-  setTimeout(() => {
-    al.classList.remove("show");
-  }, 2500);
+  setTimeout(() => al.classList.remove("show"), 2500);
 }
 
 /* ============================================================
-   IMPORTS
+   FIREBASE
    ============================================================ */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-import {
-  getAuth, GoogleAuthProvider, signInWithPopup,
-  signOut, onAuthStateChanged,
-  createUserWithEmailAndPassword, signInWithEmailAndPassword
-} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, addDoc, collection, getDocs, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
-import {
-  getFirestore, doc, setDoc, addDoc,
-  collection, getDocs, query, where,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
-
-/* ============================================================
-   FIREBASE CONFIG OK
-   ============================================================ */
 const firebaseConfig = {
   apiKey: "AIzaSyDBM97jFiC31LlofM_YOJY2l20YqAkxYWc",
   authDomain: "casa-zapatillas.firebaseapp.com",
@@ -497,7 +482,7 @@ const registerForm = document.getElementById("formRegister");
 const loginItem = document.getElementById("loginItem");
 
 /* ============================================================
-   LOGIN GOOGLE — CORREGIDO (SIN ERROR FALSO)
+   LOGIN GOOGLE
    ============================================================ */
 googleBtn?.addEventListener("click", async () => {
   try {
@@ -515,17 +500,13 @@ googleBtn?.addEventListener("click", async () => {
     showAlert(`¡Bienvenido ${user.displayName || user.email}!`, "#10b981");
 
   } catch (err) {
-    if (
-      err.code === "auth/popup-closed-by-user" ||
-      err.code === "auth/cancelled-popup-request"
-    ) return;
-
+    if (err.code === "auth/popup-closed-by-user" || err.code === "auth/cancelled-popup-request") return;
     showAlert("Error al iniciar sesión con Google", "#dc2626");
   }
 });
 
 /* ============================================================
-   REGISTRO — YA CIERRA MODAL + ALERTA BONITA
+   REGISTRO
    ============================================================ */
 registerForm?.addEventListener("submit", async e => {
   e.preventDefault();
@@ -546,8 +527,7 @@ registerForm?.addEventListener("submit", async e => {
     });
 
     cerrarModalAuth();
-
-    showAlert("Registro exitoso ✓ Bienvenido", "#10b981");
+    showAlert(`¡Registro exitoso! Bienvenido ${nombre}`, "#10b981");
 
   } catch (err) {
     showAlert("Error en registro: " + err.message, "#dc2626");
@@ -555,15 +535,17 @@ registerForm?.addEventListener("submit", async e => {
 });
 
 /* ============================================================
-   LOGIN EMAIL — YA MUESTRA ALERTA + CIERRA MODAL
+   LOGIN EMAIL
    ============================================================ */
 loginForm?.addEventListener("submit", async e => {
   e.preventDefault();
 
   try {
-    await signInWithEmailAndPassword(auth, loginEmail.value.trim(), loginPassword.value.trim());
+    const cred = await signInWithEmailAndPassword(auth, loginEmail.value.trim(), loginPassword.value.trim());
+    const user = cred.user;
+
     cerrarModalAuth();
-    showAlert("¡Bienvenido " + loginEmail.value + "!", "#10b981");
+    showAlert(`¡Bienvenido ${user.email}!`, "#10b981");
 
   } catch (err) {
     showAlert("Error al iniciar sesión: " + err.message, "#dc2626");
@@ -579,7 +561,7 @@ function cerrarModalAuth() {
 }
 
 /* ============================================================
-   NAVBAR — AHORA SIEMPRE CARGA DROPDOWN CORRECTO
+   NAVBAR
    ============================================================ */
 function pintarUsuarioNavbar(user) {
   const foto = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}`;
@@ -639,9 +621,8 @@ onAuthStateChanged(auth, user => {
 });
 
 /* ============================================================
-   CARRITO - (sin cambios importantes)
+   CARRITO
    ============================================================ */
-
 let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
 function mostrarAlerta(nombreProducto = "") {
@@ -649,7 +630,6 @@ function mostrarAlerta(nombreProducto = "") {
   if (!al) return;
 
   al.textContent = `${nombreProducto} agregado al carrito`;
-
   al.classList.add("show");
   setTimeout(() => al.classList.remove("show"), 1800);
 }
@@ -680,41 +660,26 @@ function renderCarrito() {
     return;
   }
 
-  lista.innerHTML = `
-    <div class="row fw-bold border-bottom pb-2 mb-2">
-      <div class="col-4">Producto</div>
-      <div class="col-2">Precio</div>
-      <div class="col-3">Cantidad</div>
-      <div class="col-3">Subtotal</div>
-    </div>
-  `;
-
   carrito.forEach((item, index) => {
     const subtotal = item.precio * item.cantidad;
     total += subtotal;
 
     const row = document.createElement("div");
-    row.className = "row align-items-center border-bottom py-2";
+    row.className = "d-flex justify-content-between align-items-center border-bottom py-2";
 
     row.innerHTML = `
-      <div class="col-4 d-flex align-items-center">
+      <div class="d-flex align-items-center">
         <img src="${item.img}" width="50" class="rounded me-2">
         <div>${item.nombre}</div>
       </div>
-
-      <div class="col-2">S/ ${item.precio.toFixed(2)}</div>
-
-      <div class="col-3 d-flex align-items-center">
+      <div>S/ ${item.precio.toFixed(2)}</div>
+      <div class="d-flex align-items-center">
         <button class="btn btn-sm btn-outline-secondary me-2 btn-restar">-</button>
         <span>${item.cantidad}</span>
         <button class="btn btn-sm btn-outline-secondary ms-2 btn-sumar">+</button>
       </div>
-
-      <div class="col-3 fw-bold">S/ ${subtotal.toFixed(2)}</div>
-
-      <div class="col-12 text-end mt-2">
-        <button class="btn btn-sm btn-danger btn-eliminar"><i class="bi bi-trash"></i></button>
-      </div>
+      <div><strong>S/ ${subtotal.toFixed(2)}</strong></div>
+      <div><button class="btn btn-sm btn-danger btn-eliminar"><i class="bi bi-trash"></i></button></div>
     `;
 
     row.querySelector(".btn-restar").addEventListener("click", () => cambiarCantidad(index, -1));
@@ -756,7 +721,7 @@ document.querySelectorAll(".addToCart").forEach(btn => {
 
     const card = e.target.closest(".card");
     const nombre = card.querySelector(".card-title").textContent;
-    const precio = parseFloat(card.querySelector(".fw-bold").textContent.replace("S/",""));
+    const precio = parseFloat(card.querySelector(".fw-bold").textContent.replace("S/","").trim());
     const img = card.querySelector("img").src;
 
     const existe = carrito.find(p => p.nombre === nombre);
@@ -772,7 +737,7 @@ document.querySelectorAll(".addToCart").forEach(btn => {
 actualizarContador();
 
 /* ============================================================
-   HACER PEDIDO — CON ALERTA BONITA
+   HACER PEDIDO
    ============================================================ */
 document.getElementById("btnComprar")?.addEventListener("click", async () => {
   if (!auth.currentUser) {
@@ -802,7 +767,7 @@ document.getElementById("btnComprar")?.addEventListener("click", async () => {
     const modal = bootstrap.Modal.getInstance(document.getElementById("modalCarrito"));
     if (modal) modal.hide();
 
-    showAlert("Pedido registrado correctamente", "#10b981");
+    showAlert("¡Pedido realizado con éxito!", "#10b981");
 
   } catch (err) {
     showAlert("Error al guardar tu pedido", "#dc2626");
@@ -823,12 +788,9 @@ async function cargarPedidosUsuario() {
   lista.innerHTML = `<p class="text-center">Cargando pedidos...</p>`;
 
   try {
-    const q = query(
-      collection(db, "Pedidos"),
-      where("uid", "==", user.uid)
-    );
-
+    const q = query(collection(db, "Pedidos"), where("uid", "==", user.uid));
     const snap = await getDocs(q);
+
     const pedidos = [];
     snap.forEach(doc => pedidos.push({ id: doc.id, ...doc.data() }));
 
@@ -841,9 +803,7 @@ async function cargarPedidosUsuario() {
     if (pedidos.length === 0) {
       lista.innerHTML = `<p class="text-center">No tienes pedidos.</p>`;
     } else {
-      lista.innerHTML = pedidos
-        .map((p, index) => renderPedidoHtml(p, index + 1))
-        .join("");
+      lista.innerHTML = pedidos.map((p, index) => renderPedidoHtml(p, index + 1)).join("");
     }
 
     new bootstrap.Modal(document.getElementById("modalPedidos")).show();
@@ -857,20 +817,15 @@ async function cargarPedidosUsuario() {
    HTML PEDIDO
    ============================================================ */
 function renderPedidoHtml(p, numero) {
-  const fecha = p.createdAt?.toDate
-    ? p.createdAt.toDate().toLocaleString()
-    : "Sin fecha";
+  const fecha = p.createdAt?.toDate ? p.createdAt.toDate().toLocaleString() : "Sin fecha";
 
   let itemsHtml = "";
   (p.items || []).forEach(i => {
     itemsHtml += `
-      <div class="pedido-item">
+      <div class="d-flex justify-content-between align-items-center mb-1">
         <div class="d-flex align-items-center">
-          <img src="${i.img}">
-          <div>
-            <strong>${i.nombre}</strong><br>
-            <small>Cantidad: ${i.cantidad}</small>
-          </div>
+          <img src="${i.img}" width="40" class="rounded me-2">
+          <div>${i.nombre} x ${i.cantidad}</div>
         </div>
         <div><strong>S/ ${(i.precio * i.cantidad).toFixed(2)}</strong></div>
       </div>
@@ -878,12 +833,12 @@ function renderPedidoHtml(p, numero) {
   });
 
   return `
-    <div class="pedido-card">
-      <div class="pedido-header">Pedido #${numero}</div>
-      <div><strong>Fecha:</strong> ${fecha}</div>
+    <div class="pedido-card mb-3 p-3">
+      <div><strong>Pedido #${numero}</strong></div>
+      <div><small>Fecha: ${fecha}</small></div>
       <hr>
       ${itemsHtml}
-      <div class="text-end mt-2"><h5>Total: S/ ${p.total?.toFixed(2)}</h5></div>
+      <div class="text-end mt-2"><strong>Total: S/ ${p.total?.toFixed(2)}</strong></div>
     </div>
   `;
 }
@@ -894,6 +849,7 @@ function renderPedidoHtml(p, numero) {
 
 </body>
 </html>
+
 
 
 
