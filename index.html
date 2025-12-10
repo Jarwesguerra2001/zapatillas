@@ -435,28 +435,26 @@
 <!-- FIREBASE COMPLETO -->
 <!-- FIREBASE COMPLETO -->
 <!-- FIREBASE COMPLETO CORREGIDO -->
+<!-- FIREBASE COMPLETO FUNCIONAL -->
 <script type="module">
 
 /* ============================================================
    ALERTA BONITA GLOBAL
-   ============================================================ */
+============================================================ */
 function showAlert(msg, color = "#4f46e5") {
   const al = document.getElementById("alertaGeneral");
   if (!al) return;
 
   al.style.background = color;
   al.textContent = msg;
-
   al.classList.add("show");
 
-  setTimeout(() => {
-    al.classList.remove("show");
-  }, 2500);
+  setTimeout(() => al.classList.remove("show"), 2500);
 }
 
 /* ============================================================
    IMPORTS
-   ============================================================ */
+============================================================ */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
 import {
   getAuth, GoogleAuthProvider, signInWithPopup,
@@ -472,7 +470,7 @@ import {
 
 /* ============================================================
    FIREBASE CONFIG
-   ============================================================ */
+============================================================ */
 const firebaseConfig = {
   apiKey: "AIzaSyDBM97jFiC31LlofM_YOJY2l20YqAkxYWc",
   authDomain: "casa-zapatillas.firebaseapp.com",
@@ -492,7 +490,7 @@ provider.setCustomParameters({ prompt: "select_account" });
 
 /* ============================================================
    ELEMENTOS
-   ============================================================ */
+============================================================ */
 const googleBtn = document.getElementById("googleLogin");
 const loginForm = document.getElementById("formlogin");
 const registerForm = document.getElementById("formRegister");
@@ -500,7 +498,7 @@ const loginItem = document.getElementById("loginItem");
 
 /* ============================================================
    LOGIN GOOGLE
-   ============================================================ */
+============================================================ */
 googleBtn?.addEventListener("click", async () => {
   try {
     const result = await signInWithPopup(auth, provider);
@@ -517,18 +515,14 @@ googleBtn?.addEventListener("click", async () => {
     showAlert(`¡Bienvenido ${user.displayName || user.email}!`, "#10b981");
 
   } catch (err) {
-    if (
-      err.code === "auth/popup-closed-by-user" ||
-      err.code === "auth/cancelled-popup-request"
-    ) return;
-
+    if (err.code === "auth/popup-closed-by-user" || err.code === "auth/cancelled-popup-request") return;
     showAlert("Error al iniciar sesión con Google", "#dc2626");
   }
 });
 
 /* ============================================================
    REGISTRO
-   ============================================================ */
+============================================================ */
 registerForm?.addEventListener("submit", async e => {
   e.preventDefault();
 
@@ -548,7 +542,6 @@ registerForm?.addEventListener("submit", async e => {
     });
 
     cerrarModalAuth();
-
     showAlert("Registro exitoso ✓ Bienvenido", "#10b981");
 
   } catch (err) {
@@ -558,15 +551,13 @@ registerForm?.addEventListener("submit", async e => {
 
 /* ============================================================
    LOGIN EMAIL
-   ============================================================ */
+============================================================ */
 loginForm?.addEventListener("submit", async e => {
   e.preventDefault();
-
   try {
     await signInWithEmailAndPassword(auth, loginEmail.value.trim(), loginPassword.value.trim());
     cerrarModalAuth();
-    showAlert("¡Bienvenido " + loginEmail.value + "!", "#10b981");
-
+    showAlert(`¡Bienvenido ${loginEmail.value}!`, "#10b981");
   } catch (err) {
     showAlert("Error al iniciar sesión: " + err.message, "#dc2626");
   }
@@ -574,7 +565,7 @@ loginForm?.addEventListener("submit", async e => {
 
 /* ============================================================
    CERRAR MODAL AUTH
-   ============================================================ */
+============================================================ */
 function cerrarModalAuth() {
   const modal = bootstrap.Modal.getInstance(document.getElementById("authModal"));
   if (modal) modal.hide();
@@ -582,7 +573,7 @@ function cerrarModalAuth() {
 
 /* ============================================================
    NAVBAR
-   ============================================================ */
+============================================================ */
 function pintarUsuarioNavbar(user) {
   const foto = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}`;
   const nombre = user.displayName || user.email;
@@ -642,15 +633,13 @@ onAuthStateChanged(auth, user => {
 
 /* ============================================================
    CARRITO
-   ============================================================ */
+============================================================ */
 let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
 function mostrarAlerta(nombreProducto = "") {
   const al = document.getElementById("alertaAgregado");
   if (!al) return;
-
   al.textContent = `${nombreProducto} agregado al carrito`;
-
   al.classList.add("show");
   setTimeout(() => al.classList.remove("show"), 1800);
 }
@@ -669,7 +658,6 @@ function actualizarContador() {
 function renderCarrito() {
   const lista = document.getElementById("listaCarrito");
   const totalSpan = document.getElementById("totalCarrito");
-
   if (!lista || !totalSpan) return;
 
   lista.innerHTML = "";
@@ -696,23 +684,18 @@ function renderCarrito() {
 
     const row = document.createElement("div");
     row.className = "row align-items-center border-bottom py-2";
-
     row.innerHTML = `
       <div class="col-4 d-flex align-items-center">
         <img src="${item.img}" width="50" class="rounded me-2">
         <div>${item.nombre}</div>
       </div>
-
       <div class="col-2">S/ ${item.precio.toFixed(2)}</div>
-
       <div class="col-3 d-flex align-items-center">
         <button class="btn btn-sm btn-outline-secondary me-2 btn-restar">-</button>
         <span>${item.cantidad}</span>
         <button class="btn btn-sm btn-outline-secondary ms-2 btn-sumar">+</button>
       </div>
-
       <div class="col-3 fw-bold">S/ ${subtotal.toFixed(2)}</div>
-
       <div class="col-12 text-end mt-2">
         <button class="btn btn-sm btn-danger btn-eliminar"><i class="bi bi-trash"></i></button>
       </div>
@@ -744,7 +727,8 @@ function eliminarItem(index) {
 document.addEventListener("click", e => {
   if (e.target.closest("#btnCarritoIcono")) {
     renderCarrito();
-    new bootstrap.Modal(document.getElementById("modalCarrito")).show();
+    const modal = new bootstrap.Modal(document.getElementById("modalCarrito"));
+    modal.show();
   }
 });
 
@@ -761,7 +745,6 @@ document.querySelectorAll(".addToCart").forEach(btn => {
     const img = card.querySelector("img").src;
 
     const existe = carrito.find(p => p.nombre === nombre);
-
     if (existe) existe.cantidad++;
     else carrito.push({ nombre, precio, img, cantidad: 1 });
 
@@ -774,7 +757,7 @@ actualizarContador();
 
 /* ============================================================
    HACER PEDIDO
-   ============================================================ */
+============================================================ */
 document.getElementById("btnComprar")?.addEventListener("click", async () => {
   if (!auth.currentUser) {
     new bootstrap.Modal(document.getElementById("authModal")).show();
@@ -788,7 +771,7 @@ document.getElementById("btnComprar")?.addEventListener("click", async () => {
 
   try {
     const uid = auth.currentUser.uid;
-    const totalPedido = carrito.reduce((acc, i) => acc + (i.precio * i.cantidad), 0);
+    const totalPedido = carrito.reduce((acc, i) => acc + i.precio * i.cantidad, 0);
 
     await addDoc(collection(db, "Pedidos"), {
       uid,
@@ -813,7 +796,7 @@ document.getElementById("btnComprar")?.addEventListener("click", async () => {
 
 /* ============================================================
    CARGAR PEDIDOS
-   ============================================================ */
+============================================================ */
 async function cargarPedidosUsuario() {
   const user = auth.currentUser;
   if (!user) {
@@ -825,11 +808,7 @@ async function cargarPedidosUsuario() {
   lista.innerHTML = `<p class="text-center">Cargando pedidos...</p>`;
 
   try {
-    const q = query(
-      collection(db, "Pedidos"),
-      where("uid", "==", user.uid)
-    );
-
+    const q = query(collection(db, "Pedidos"), where("uid", "==", user.uid));
     const snap = await getDocs(q);
     const pedidos = [];
     snap.forEach(doc => pedidos.push({ id: doc.id, ...doc.data() }));
@@ -843,12 +822,11 @@ async function cargarPedidosUsuario() {
     if (pedidos.length === 0) {
       lista.innerHTML = `<p class="text-center">No tienes pedidos.</p>`;
     } else {
-      lista.innerHTML = pedidos
-        .map((p, index) => renderPedidoHtml(p, index + 1))
-        .join("");
+      lista.innerHTML = pedidos.map((p, i) => renderPedidoHtml(p, i + 1)).join("");
     }
 
-    new bootstrap.Modal(document.getElementById("modalPedidos")).show();
+    const modal = new bootstrap.Modal(document.getElementById("modalPedidos"));
+    modal.show();
 
   } catch (err) {
     lista.innerHTML = `<p class="text-center text-danger">Error al cargar pedidos</p>`;
@@ -857,12 +835,9 @@ async function cargarPedidosUsuario() {
 
 /* ============================================================
    HTML PEDIDO
-   ============================================================ */
+============================================================ */
 function renderPedidoHtml(p, numero) {
-  const fecha = p.createdAt?.toDate
-    ? p.createdAt.toDate().toLocaleString()
-    : "Sin fecha";
-
+  const fecha = p.createdAt?.toDate ? p.createdAt.toDate().toLocaleString() : "Sin fecha";
   let itemsHtml = "";
   (p.items || []).forEach(i => {
     const subtotal = i.precio * i.cantidad;
@@ -880,7 +855,7 @@ function renderPedidoHtml(p, numero) {
     `;
   });
 
-  const total = p.total ?? (p.items?.reduce((acc, i) => acc + (i.precio * i.cantidad), 0) || 0);
+  const total = p.total ?? (p.items?.reduce((acc, i) => acc + i.precio * i.cantidad, 0) || 0);
 
   return `
     <div class="pedido-card mb-3 p-3 border rounded">
@@ -899,6 +874,7 @@ function renderPedidoHtml(p, numero) {
 
 </body>
 </html>
+
 
 
 
