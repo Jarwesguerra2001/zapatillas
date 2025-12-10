@@ -3,189 +3,70 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tienda de Zapatillaz</title>
+  <title>tienda online </title>
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <style>
-
-  #alertaGeneral {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background: #4f46e5;
-  color: white;
-  padding: 12px 18px;
+.pedido-card {
+  border: 1px solid #ddd;
+  background: #fff;
   border-radius: 10px;
-  font-weight: 600;
-  box-shadow: 0 4px 14px rgba(0,0,0,.25);
-  opacity: 0;
-  transform: translateY(-10px);
-  transition: all .3s ease;
-  z-index: 3000;
+  padding: 15px;
+  margin-bottom: 20px;
 }
 
-#alertaGeneral.show {
-  opacity: 1;
-  transform: translateY(0);
+.pedido-header {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
+.pedido-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.pedido-item:last-child {
+  border: none;
+}
+
+.pedido-item img {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  margin-right: 12px;
+}
     
-  /* Fuentes modernas */
-  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-
-  body {
-    font-family: 'Poppins', sans-serif;
-    background: #f5f6fa;
-  }
-
-  /* NAVBAR GLASS EFFECT */
-  .navbar {
-    backdrop-filter: blur(12px);
-    background: rgba(0, 0, 0, 0.75) !important;
-  }
-
-  .navbar-brand {
-    font-weight: 700;
-    letter-spacing: 1px;
-  }
-
-  /* HEADER */
-  header {
-    background: linear-gradient(45deg, #4f46e5, #6d28d9, #9333ea);
-    color: white;
-    padding: 80px 0;
-    border-radius: 0 0 25px 25px;
-    animation: fadeIn 1s ease-out;
-  }
-
-  /* TITULOS */
-  h2 {
-    font-weight: 700;
-    color: #333;
-  }
-
-  /* PRODUCT CARDS */
-  .card {
-    border: none;
-    border-radius: 18px;
-    overflow: hidden;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-  }
-
-  .card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 12px 20px rgba(0,0,0,0.15);
-  }
-
-  .card img {
-    height: 180px;
-    object-fit: cover;
-  }
-
-  .card-title {
-    font-weight: 600;
-  }
-
-  /* BOTON AGREGAR */
-  .btn-primary {
-    background: linear-gradient(45deg, #4f46e5, #9333ea);
-    border: none;
-    font-weight: 600;
-  }
-  .btn-primary:hover {
-    opacity: 0.85;
-  }
-
-  /* ALERTA PRODUCTO */
-  #alertaAgregado {
-    border-radius: 10px;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
-    font-size: 15px;
-  }
-
-  /* CARRITO FLOTANTE */
-  #btnCarritoIcono {
-    background: #4f46e5;
-    padding: 10px 14px;
-    border-radius: 50%;
-    color: white;
-    box-shadow: 0 6px 14px rgba(0,0,0,0.2);
-    transition: 0.3s;
-  }
-  #btnCarritoIcono:hover {
-    transform: scale(1.1);
-  }
-
-  /* CONTADOR */
-  #contadorCarrito {
-    background: #ef4444;
-  }
-
-  /* MODALES */
-  .modal-content {
-    border-radius: 18px;
-    overflow: hidden;
-    border: none;
-  }
-
-  .modal-header {
-    background: #4f46e5 !important;
-    color: white;
-  }
-
-  /* SECCION PEDIDOS */
-  .pedido-card {
-    border-radius: 14px;
-    border: 1px solid #ddd;
-    padding: 15px;
-    background: white;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-  }
-
-  /* FOOTER */
-  footer {
-    background: #1f1f1f;
-  }
-
-  /* Animation */
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .toast-alert {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 3000;
-  background: #0d6efd;
-  color: white;
-  padding: 12px 18px;
-  border-radius: 10px;
-  font-weight: 600;
-  box-shadow: 0 4px 12px rgba(0,0,0,.18);
-  opacity: 0;
-  transform: translateY(-20px);
-  transition: all .4s ease;
-}
-.toast-alert.show {
-  opacity: 1;
-  transform: translateY(0);
-}
-
+  
+    #alertaAgregado {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 2000;
+      display: none;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-weight: 600;
+      box-shadow: 0 4px 10px rgba(0,0,0,.15);
+      background-color: green;
+      color: white;
+    }
+    .pedido-item { border-bottom: 1px solid #e9ecef; padding: 10px 0; }
   </style>
 </head>
 
 <body>
 
-<div id="alertaAgregado" class="toast-alert">Producto agregado al carrito</div>
-<div id="alertaGeneral"></div>
+<div id="alertaAgregado" class="alert alert-success">El PRODUCTO SE A AGREGA CORRECTAMENTE 😀</div>
 
 <!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container">
-    <a class="navbar-brand fw-bold" href="#">TIENDA DE ZAPATILLAZ JARWES BONEY</a>
+    <a class="navbar-brand fw-bold" href="#">tienda online</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -203,27 +84,27 @@
 </nav>
 
 <!-- HEADER -->
-<header class="text-white text-center">
+<header class="bg-primary text-white text-center py-5">
   <div class="container">
-    <h1 class="display-5 fw-bold">🔥 Bienvenido a Zapatillaz Jarwes Boney</h1>
-    <p class="lead mt-3">Los mejores precios y la mejor calidad en un solo lugar</p>
+    <h1 class="display-4">Bienvenido a tienda online</h1>
+    <p class="lead">Tu tienda de confianza al mejor precio</p>
   </div>
 </header>
 
 <!-- PRODUCTOS -->
 <section class="py-5">
   <div class="container">
-    <h2 class="text-center mb-4">NUESTROS PRODUCTOS A BUEN PRECIO</h2>
+    <h2 class="text-center mb-4">NUESTROS PRODUCTOS</h2>
     <div class="row g-4">
 
       <!-- PRODUCTO 1 -->
       <div class="col-12 col-sm-6 col-md-3">
         <div class="card h-80 shadow-sm">
-          <img src="img/1.jpeg" class="card-img-top" alt="camisa">
+          <img src="imagenes/camiseta.jpeg" class="card-img-top" alt="camisa">
           <div class="card-body text-center">
-            <h5 class="card-title">ZAPATILLAS NIKE</h5>
+            <h5 class="card-title">camisa</h5>
             <p class="card-text">para hombre</p>
-            <p class="fw-bold">s/90.00</p>
+            <p class="fw-bold">s/30.00</p>
             <button class="btn btn-primary addToCart">AGREGAR AL CARRITO</button>
           </div>
         </div>
@@ -232,20 +113,20 @@
       <!-- PRODUCTO 2 -->
       <div class="col-12 col-sm-6 col-md-3">
         <div class="card h-80 shadow-sm">
-          <img src="img/2.jpeg" class="card-img-top" alt="zapatillas">
+          <img src="imagenes/tenis.jpeg" class="card-img-top" alt="zapatillas">
           <div class="card-body text-center">
-            <h5 class="card-title">zapatillas PUMA</h5>
+            <h5 class="card-title">zapatillas</h5>
             <p class="card-text">zapatillas deportivas</p>
-            <p class="fw-bold">s/45.00</p>
+            <p class="fw-bold">s/35.00</p>
             <button class="btn btn-primary addToCart">AGREGAR AL CARRITO</button>
           </div>
         </div>
       </div>
 
-            <!-- PRODUCTO 3 -->
+            <!-- PRODUCTO 2 -->
       <div class="col-12 col-sm-6 col-md-3">
         <div class="card h-80 shadow-sm">
-          <img src="img/3.jpeg" class="card-img-top" alt="zapatillas">
+          <img src="imagenes/tenis.jpeg" class="card-img-top" alt="zapatillas">
           <div class="card-body text-center">
             <h5 class="card-title">zapatillas</h5>
             <p class="card-text">zapatillas deportivas</p>
@@ -256,10 +137,10 @@
       </div>
 
 
-            <!-- PRODUCTO 4 -->
+            <!-- PRODUCTO 2 -->
       <div class="col-12 col-sm-6 col-md-3">
         <div class="card h-80 shadow-sm">
-          <img src="img/4.jpeg" class="card-img-top" alt="zapatillas">
+          <img src="imagenes/tenis.jpeg" class="card-img-top" alt="zapatillas">
           <div class="card-body text-center">
             <h5 class="card-title">zapatillas</h5>
             <p class="card-text">zapatillas deportivas</p>
@@ -270,10 +151,10 @@
       </div>
 
 
-            <!-- PRODUCTO 5 -->
+            <!-- PRODUCTO 2 -->
       <div class="col-12 col-sm-6 col-md-3">
         <div class="card h-80 shadow-sm">
-          <img src="img/5.jpeg" class="card-img-top" alt="zapatillas">
+          <img src="imagenes/tenis.jpeg" class="card-img-top" alt="zapatillas">
           <div class="card-body text-center">
             <h5 class="card-title">zapatillas</h5>
             <p class="card-text">zapatillas deportivas</p>
@@ -283,25 +164,10 @@
         </div>
       </div>
 
-            <!-- PRODUCTO 6 -->
+            <!-- PRODUCTO 2 -->
       <div class="col-12 col-sm-6 col-md-3">
         <div class="card h-80 shadow-sm">
-          <img src="img/6.jpeg" class="card-img-top" alt="zapatillas">
-          <div class="card-body text-center">
-            <h5 class="card-title">zapatillas</h5>
-            <p class="card-text">zapatillas deportivas</p>
-            <p class="fw-bold">s/35.00</p>
-            <button class="btn btn-primary addToCart">AGREGAR AL CARRITO</button>
-          </div>
-        </div>
-      </div>
-
-
-
-            <!-- PRODUCTO 7 -->
-      <div class="col-12 col-sm-6 col-md-3">
-        <div class="card h-80 shadow-sm">
-          <img src="img/7.jpeg" class="card-img-top" alt="zapatillas">
+          <img src="imagenes/tenis.jpeg" class="card-img-top" alt="zapatillas">
           <div class="card-body text-center">
             <h5 class="card-title">zapatillas</h5>
             <p class="card-text">zapatillas deportivas</p>
@@ -313,14 +179,29 @@
 
 
 
-            <!-- PRODUCTO 8 -->
+            <!-- PRODUCTO 2 -->
       <div class="col-12 col-sm-6 col-md-3">
         <div class="card h-80 shadow-sm">
-          <img src="img/8.jpeg" class="card-img-top" alt="zapatillas">
+          <img src="imagenes/tenis.jpeg" class="card-img-top" alt="zapatillas">
           <div class="card-body text-center">
             <h5 class="card-title">zapatillas</h5>
             <p class="card-text">zapatillas deportivas</p>
-            <p class="fw-bold">s/25.00</p>
+            <p class="fw-bold">s/35.00</p>
+            <button class="btn btn-primary addToCart">AGREGAR AL CARRITO</button>
+          </div>
+        </div>
+      </div>
+
+
+
+            <!-- PRODUCTO 2 -->
+      <div class="col-12 col-sm-6 col-md-3">
+        <div class="card h-80 shadow-sm">
+          <img src="imagenes/tenis.jpeg" class="card-img-top" alt="zapatillas">
+          <div class="card-body text-center">
+            <h5 class="card-title">zapatillas</h5>
+            <p class="card-text">zapatillas deportivas</p>
+            <p class="fw-bold">s/35.00</p>
             <button class="btn btn-primary addToCart">AGREGAR AL CARRITO</button>
           </div>
         </div>
@@ -425,394 +306,427 @@
   
 <!-- FOOTER -->
 <footer class="bg-dark text-white text-center py-3 mt-5">
-  <p class="mb-0">&copy; jarwes boney 2025</p>
+  <p class="mb-0">&copy; 2025 matiaz - Todos los derechos reservados</p>
 </footer>
 
 
 <!-- BOOTSTRAP JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-
+<!-- FIREBASE -->
 <script type="module">
-
-/* ============================================================
-   ALERTA GLOBAL
-   ============================================================ */
-function showAlert(msg, color = "#4f46e5") {
-  const al = document.getElementById("alertaGeneral");
-  if (!al) return;
-  al.style.background = color;
-  al.textContent = msg;
-  al.classList.add("show");
-  setTimeout(() => al.classList.remove("show"), 2500);
-}
-
-/* ============================================================
-   FIREBASE CONFIG
-   ============================================================ */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, addDoc, collection, getDocs, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import {
+  getAuth, GoogleAuthProvider, signInWithPopup,
+  signOut, onAuthStateChanged,
+  createUserWithEmailAndPassword, signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
+import {
+  getFirestore, doc, setDoc, addDoc,
+  collection, getDocs, query, where, orderBy,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
+
+/* ============================================================
+   CONFIGURACIÓN FIREBASE
+   ============================================================ */
 const firebaseConfig = {
   apiKey: "AIzaSyDBM97jFiC31LlofM_YOJY2l20YqAkxYWc",
   authDomain: "casa-zapatillas.firebaseapp.com",
   projectId: "casa-zapatillas",
-  storageBucket: "casa-zapatillas.firebasestorage.app",
+  storageBucket: "casa-zapatillas.appspot.com",
   messagingSenderId: "912547598774",
   appId: "1:912547598774:web:28f3708a71561f3c62b117",
   measurementId: "G-TGGF3N8RTD"
 };
 
 const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const db = getFirestore(app);
+
 const provider = new GoogleAuthProvider();
 provider.setCustomParameters({ prompt: "select_account" });
 
 /* ============================================================
-   VARIABLES
+   ELEMENTOS DEL DOM
    ============================================================ */
 const googleBtn = document.getElementById("googleLogin");
 const loginForm = document.getElementById("formlogin");
 const registerForm = document.getElementById("formRegister");
 const loginItem = document.getElementById("loginItem");
-let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
 /* ============================================================
-   ALERTA CARRITO
+   LOGIN CON GOOGLE
    ============================================================ */
-function mostrarAlerta(nombreProducto = "") {
-  const al = document.getElementById("alertaAgregado");
-  if (!al) return;
-  al.textContent = `${nombreProducto} agregado al carrito`;
-  al.classList.add("show");
-  setTimeout(() => al.classList.remove("show"), 1800);
-}
-
-/* ============================================================
-   LOGIN GOOGLE
-   ============================================================ */
-googleBtn?.addEventListener("click", async () => {
+googleBtn.addEventListener("click", async () => {
   try {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
+
     await setDoc(doc(db, "usuarios", user.uid), {
       uid: user.uid,
       nombre: user.displayName,
       email: user.email,
       foto: user.photoURL
     }, { merge: true });
+
     cerrarModalAuth();
-    showAlert(`¡Bienvenido ${user.displayName || user.email}!`, "#10b981");
+    alert("Hola Bienvenido " + (user.displayName || user.email));
   } catch (err) {
-    if (err.code.includes("popup")) return;
-    showAlert("Error al iniciar sesión con Google", "#dc2626");
+    alert("Error al iniciar sesión con Google");
+    console.error(err);
   }
 });
 
 /* ============================================================
-   REGISTRO EMAIL
+   REGISTRO CON EMAIL
    ============================================================ */
-registerForm?.addEventListener("submit", async e => {
+registerForm.addEventListener("submit", async e => {
   e.preventDefault();
   const nombre = regNombre.value.trim();
   const email = regEmail.value.trim();
   const pass = regPassword.value;
+
   try {
     const cred = await createUserWithEmailAndPassword(auth, email, pass);
     const user = cred.user;
+
     await setDoc(doc(db, "usuarios", user.uid), {
       uid: user.uid,
       nombre,
       email,
       foto: `https://ui-avatars.com/api/?name=${encodeURIComponent(nombre)}&background=random`
     });
+
+    alert("Registro exitoso. Ahora inicia sesión.");
     cerrarModalAuth();
-    showAlert(`¡Registro exitoso! Bienvenido ${nombre}`, "#10b981");
   } catch (err) {
-    showAlert("Error en registro: " + err.message, "#dc2626");
+    alert("Error en registro: " + err.message);
   }
 });
 
 /* ============================================================
-   LOGIN EMAIL
+   LOGIN CON EMAIL
    ============================================================ */
-loginForm?.addEventListener("submit", async e => {
+loginForm.addEventListener("submit", async e => {
   e.preventDefault();
   try {
-    const cred = await signInWithEmailAndPassword(auth, loginEmail.value.trim(), loginPassword.value.trim());
-    const user = cred.user;
+    const email = loginEmail.value.trim();
+    const password = loginPassword.value.trim();
+    await signInWithEmailAndPassword(auth, email, password);
     cerrarModalAuth();
-    showAlert(`¡Bienvenido ${user.email}!`, "#10b981");
+    alert("Hola Bienvenido " + email);
   } catch (err) {
-    showAlert("Error al iniciar sesión: " + err.message, "#dc2626");
+    alert("Usuario o contraseña incorrecta");
   }
 });
 
 /* ============================================================
-   MODAL AUTH
+   NAVBAR - PINTAR USUARIO
    ============================================================ */
-function cerrarModalAuth() {
+function cerrarModalAuth(){
   const modal = bootstrap.Modal.getInstance(document.getElementById("authModal"));
-  if (modal) modal.hide();
+  if(modal) modal.hide();
 }
 
-/* ============================================================
-   NAVBAR USER
-   ============================================================ */
-function pintarUsuarioNavbar(user) {
+function pintarUsuarioNavbar(user){
+  if(document.getElementById("userinfo")) return;
+
   const foto = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}`;
   const nombre = user.displayName || user.email;
-  limpiarUsuarioNavbar();
+
   const li = document.createElement("li");
   li.className = "nav-item dropdown ms-3 d-flex align-items-center";
   li.id = "userinfo";
+
   li.innerHTML = `
     <button class="btn btn-link position-relative me-3 text-white" id="btnCarritoIcono">
       <i class="bi bi-cart3 fs-5 text-white"></i>
       <span id="contadorCarrito" class="badge rounded-pill bg-danger position-absolute top-0 start-100 translate-middle">0</span>
     </button>
-    <a class="nav-link dropdown-toggle d-flex align-items-center"
-       href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+
+    <a class="nav-link dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
       <img src="${foto}" class="rounded-circle me-2" width="32" height="32">
       <span class="text-white">${nombre}</span>
     </a>
+
     <ul class="dropdown-menu dropdown-menu-end">
       <li><a class="dropdown-item" id="misPedidosBtn">Mis pedidos</a></li>
       <li><hr class="dropdown-divider"></li>
       <li><a class="dropdown-item text-danger" id="cerrarSesionBtn">Cerrar sesión</a></li>
     </ul>
   `;
+
   document.querySelector(".navbar-nav").appendChild(li);
 
-  // EVENTOS DEL NAVBAR SOLO SI HAY USUARIO
   document.getElementById("cerrarSesionBtn").addEventListener("click", async () => {
     await signOut(auth);
-    showAlert("Sesión cerrada", "#4f46e5");
   });
-  document.getElementById("misPedidosBtn").addEventListener("click", cargarPedidosUsuario);
 
-  // EVENTO CARRITO SOLO SI HAY USUARIO
-  const btnCarrito = document.getElementById("btnCarritoIcono");
-  btnCarrito.addEventListener("click", () => {
-    renderCarrito();
-    new bootstrap.Modal(document.getElementById("modalCarrito")).show();
+  document.getElementById("misPedidosBtn").addEventListener("click", async () => {
+    await cargarPedidosUsuario();
   });
 }
 
-function limpiarUsuarioNavbar() {
+function limpiarUsuarioNavbar(){
   const info = document.getElementById("userinfo");
-  if (info) info.remove();
+  if(info) info.remove();
 }
 
 onAuthStateChanged(auth, user => {
-  if (user) {
+  if(user){
     pintarUsuarioNavbar(user);
-    loginItem?.classList.add("d-none");
+    loginItem.classList.add("d-none");
   } else {
     limpiarUsuarioNavbar();
-    loginItem?.classList.remove("d-none");
+    loginItem.classList.remove("d-none");
   }
 });
 
 /* ============================================================
    CARRITO
    ============================================================ */
-function guardarCarrito() {
+let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+
+function mostrarAlerta(){
+  const al = document.getElementById("alertaAgregado");
+  al.style.display = "block";
+  setTimeout(()=> al.style.display = "none", 1600);
+}
+
+function guardarCarrito(){
   localStorage.setItem("carrito", JSON.stringify(carrito));
   actualizarContador();
 }
 
-function actualizarContador() {
+function actualizarContador(){
   const c = document.getElementById("contadorCarrito");
-  if (!c) return;
-  c.textContent = carrito.reduce((acc, i) => acc + i.cantidad, 0);
+  if(!c) return;
+  c.textContent = carrito.reduce((acc, i)=> acc + i.cantidad, 0);
 }
 
-function renderCarrito() {
+function renderCarrito(){
   const lista = document.getElementById("listaCarrito");
   const totalSpan = document.getElementById("totalCarrito");
-  if (!lista || !totalSpan) return;
 
   lista.innerHTML = "";
   let total = 0;
 
-  if (carrito.length === 0) {
-    lista.innerHTML = `<p class="text-center">Tu carrito está vacío.</p>`;
+  if(carrito.length === 0){
+    lista.innerHTML = '<p class="text-center">Tu carrito está vacío.</p>';
     totalSpan.textContent = "S/ 0.00";
     return;
   }
 
-  carrito.forEach((item, index) => {
+  lista.innerHTML = `
+    <div class="row fw-bold border-bottom pb-2 mb-2">
+      <div class="col-4">Producto</div>
+      <div class="col-2">Precio</div>
+      <div class="col-3">Cantidad</div>
+      <div class="col-3">Subtotal</div>
+    </div>
+  `;
+
+  carrito.forEach((item, index)=>{
     const subtotal = item.precio * item.cantidad;
     total += subtotal;
+
     const row = document.createElement("div");
-    row.className = "d-flex justify-content-between align-items-center border-bottom py-2";
+    row.className = "row align-items-center border-bottom py-2";
+
     row.innerHTML = `
-      <div class="d-flex align-items-center">
+      <div class="col-4 d-flex align-items-center">
         <img src="${item.img}" width="50" class="rounded me-2">
         <div>${item.nombre}</div>
       </div>
-      <div>S/ ${item.precio.toFixed(2)}</div>
-      <div class="d-flex align-items-center">
+      <div class="col-2">S/ ${item.precio.toFixed(2)}</div>
+      <div class="col-3 d-flex align-items-center">
         <button class="btn btn-sm btn-outline-secondary me-2 btn-restar">-</button>
-        <span class="cantidad">${item.cantidad}</span>
+        <span>${item.cantidad}</span>
         <button class="btn btn-sm btn-outline-secondary ms-2 btn-sumar">+</button>
       </div>
-      <div><strong>S/ ${subtotal.toFixed(2)}</strong></div>
-      <div><button class="btn btn-sm btn-danger btn-eliminar"><i class="bi bi-trash"></i></button></div>
+      <div class="col-3 fw-bold">S/ ${subtotal.toFixed(2)}</div>
+      <div class="col-12 text-end mt-2">
+        <button class="btn btn-sm btn-danger btn-eliminar"><i class="bi bi-trash"></i></button>
+      </div>
     `;
-    row.querySelector(".btn-restar").addEventListener("click", () => cambiarCantidad(index, -1));
-    row.querySelector(".btn-sumar").addEventListener("click", () => cambiarCantidad(index, 1));
-    row.querySelector(".btn-eliminar").addEventListener("click", () => eliminarItem(index));
+
+    row.querySelector(".btn-restar").addEventListener("click", ()=> cambiarCantidad(index, -1));
+    row.querySelector(".btn-sumar").addEventListener("click", ()=> cambiarCantidad(index, 1));
+    row.querySelector(".btn-eliminar").addEventListener("click", ()=> eliminarItem(index));
+
     lista.appendChild(row);
   });
 
   totalSpan.textContent = `S/ ${total.toFixed(2)}`;
 }
 
-function cambiarCantidad(index, value) {
+function cambiarCantidad(index, value){
   carrito[index].cantidad += value;
-  if (carrito[index].cantidad <= 0) carrito.splice(index, 1);
+  if(carrito[index].cantidad <= 0) carrito.splice(index, 1);
   guardarCarrito();
   renderCarrito();
 }
 
-function eliminarItem(index) {
+function eliminarItem(index){
   carrito.splice(index, 1);
   guardarCarrito();
   renderCarrito();
 }
 
-document.querySelectorAll(".addToCart").forEach(btn => {
-  btn.addEventListener("click", e => {
-    if (!auth.currentUser) {
+document.addEventListener("click", e=>{
+  if(e.target.closest("#btnCarritoIcono")){
+    renderCarrito();
+    new bootstrap.Modal(document.getElementById("modalCarrito")).show();
+  }
+});
+
+document.querySelectorAll(".addToCart").forEach(btn=>{
+  btn.addEventListener("click", e=>{
+    if(!document.getElementById("userinfo")){
       new bootstrap.Modal(document.getElementById("authModal")).show();
       return;
     }
+
     const card = e.target.closest(".card");
     const nombre = card.querySelector(".card-title").textContent;
-    const precio = parseFloat(card.querySelector(".fw-bold").textContent.replace("S/","").trim());
+    const precio = parseFloat(card.querySelector(".fw-bold").textContent.replace("s/","").replace("S/",""));
     const img = card.querySelector("img").src;
-    const existe = carrito.find(p => p.nombre === nombre);
-    if (existe) existe.cantidad++;
+
+    const existe = carrito.find(p=> p.nombre === nombre);
+    if(existe) existe.cantidad++;
     else carrito.push({ nombre, precio, img, cantidad: 1 });
+
     guardarCarrito();
-    renderCarrito();
-    mostrarAlerta(nombre);
+    mostrarAlerta();
   });
 });
 
-guardarCarrito();
+actualizarContador();
+renderCarrito();
 
 /* ============================================================
-   PEDIDOS
+   HACER PEDIDO
    ============================================================ */
-document.getElementById("btnComprar")?.addEventListener("click", async () => {
-  if (!auth.currentUser) {
+document.getElementById("btnComprar").addEventListener("click", async ()=>{
+  if(!auth.currentUser){
     new bootstrap.Modal(document.getElementById("authModal")).show();
     return;
   }
-  if (carrito.length === 0) {
-    showAlert("El carrito está vacío", "#dc2626");
+
+  if(carrito.length === 0){
+    alert("El carrito está vacío.");
     return;
   }
-  try {
+
+  try{
     const uid = auth.currentUser.uid;
+
     await addDoc(collection(db, "Pedidos"), {
       uid,
       items: carrito,
-      total: carrito.reduce((acc, i) => acc + i.precio * i.cantidad, 0),
+      total: carrito.reduce((acc,i)=> acc+i.precio*i.cantidad, 0),
       createdAt: serverTimestamp()
     });
+
     carrito = [];
     guardarCarrito();
     renderCarrito();
+
     const modal = bootstrap.Modal.getInstance(document.getElementById("modalCarrito"));
-    if (modal) modal.hide();
-    showAlert("¡Pedido realizado con éxito!", "#10b981");
-  } catch (err) {
-    showAlert("Error al guardar tu pedido", "#dc2626");
+    if(modal) modal.hide();
+
+    alert("Pedido Registrado correctamente. ¡Revisa tus pedidos!");
+
+  } catch(err){
+    console.error(err);
+    alert("Error al guardar tu pedido");
   }
 });
 
-async function cargarPedidosUsuario() {
+/* ============================================================
+   CARGAR PEDIDOS DEL USUARIO
+   ============================================================ */
+async function cargarPedidosUsuario(){
   const user = auth.currentUser;
-  if (!user) {
+  if(!user){
     new bootstrap.Modal(document.getElementById("authModal")).show();
     return;
   }
+
   const lista = document.getElementById("listaPedidos");
   lista.innerHTML = `<p class="text-center">Cargando pedidos...</p>`;
-  try {
-    const q = query(collection(db, "Pedidos"), where("uid", "==", user.uid));
+
+  try{
+    const q = query(collection(db,"Pedidos"), where("uid","==", user.uid));
     const snap = await getDocs(q);
     const pedidos = [];
     snap.forEach(doc => pedidos.push({ id: doc.id, ...doc.data() }));
-    pedidos.sort((a,b) => {
+
+    pedidos.sort((a,b)=>{
       const fa = a.createdAt?.toMillis ? a.createdAt.toMillis() : 0;
       const fb = b.createdAt?.toMillis ? b.createdAt.toMillis() : 0;
       return fb - fa;
     });
-    if (pedidos.length === 0) lista.innerHTML = `<p class="text-center">No tienes pedidos.</p>`;
-    else lista.innerHTML = pedidos.map((p,i) => renderPedidoHtml(p,i+1)).join("");
+
+    if(pedidos.length === 0){
+      lista.innerHTML = `<p class="text-center">No tienes pedidos.</p>`;
+    } else {
+      lista.innerHTML = pedidos.map((p,index)=> renderPedidoHtml(p, index+1)).join("");
+    }
+
     new bootstrap.Modal(document.getElementById("modalPedidos")).show();
-  } catch (err) {
+
+  } catch(err){
+    console.error(err);
     lista.innerHTML = `<p class="text-center text-danger">Error al cargar pedidos</p>`;
   }
 }
 
-function renderPedidoHtml(p, numero) {
-  const fecha = p.createdAt?.toDate ? p.createdAt.toDate().toLocaleString() : "Sin fecha";
+/* ============================================================
+   RENDER PEDIDO
+   ============================================================ */
+function renderPedidoHtml(p, numero){
+  const fecha = p.createdAt?.toDate
+    ? p.createdAt.toDate().toLocaleString()
+    : "Sin fecha";
+
   let itemsHtml = "";
-  (p.items||[]).forEach(i => {
+  (p.items || []).forEach(i=>{
     itemsHtml += `
-      <div class="d-flex justify-content-between align-items-center mb-1">
+      <div class="pedido-item">
         <div class="d-flex align-items-center">
-          <img src="${i.img}" width="40" class="rounded me-2">
-          <div>${i.nombre} x ${i.cantidad}</div>
+          <img src="${i.img}">
+          <div>
+            <strong>${i.nombre}</strong><br>
+            <small>Cantidad: ${i.cantidad}</small>
+          </div>
         </div>
-        <div><strong>S/ ${(i.precio*i.cantidad).toFixed(2)}</strong></div>
+        <div>
+          <strong>S/ ${(i.precio * i.cantidad).toFixed(2)}</strong>
+        </div>
       </div>
     `;
   });
+
   return `
-    <div class="pedido-card mb-3 p-3">
-      <div><strong>Pedido #${numero}</strong></div>
-      <div><small>Fecha: ${fecha}</small></div>
+    <div class="pedido-card">
+      <div class="pedido-header">Pedido #${numero}</div>
+      <div><strong>Fecha:</strong> ${fecha}</div>
       <hr>
       ${itemsHtml}
-      <div class="text-end mt-2"><strong>Total: S/ ${p.total?.toFixed(2)}</strong></div>
+      <div class="text-end mt-2">
+        <h5>Total: S/ ${p.total?.toFixed(2) || "0.00"}</h5>
+      </div>
     </div>
   `;
 }
-
 </script>
-
-
 
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
