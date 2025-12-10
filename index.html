@@ -437,18 +437,15 @@
 <!-- FIREBASE COMPLETO CORREGIDO -->
 <!-- FIREBASE COMPLETO FUNCIONAL -->
 <script type="module">
-
 /* ============================================================
    ALERTA BONITA GLOBAL
 ============================================================ */
 function showAlert(msg, color = "#4f46e5") {
   const al = document.getElementById("alertaGeneral");
   if (!al) return;
-
   al.style.background = color;
   al.textContent = msg;
   al.classList.add("show");
-
   setTimeout(() => al.classList.remove("show"), 2500);
 }
 
@@ -456,17 +453,8 @@ function showAlert(msg, color = "#4f46e5") {
    IMPORTS
 ============================================================ */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-import {
-  getAuth, GoogleAuthProvider, signInWithPopup,
-  signOut, onAuthStateChanged,
-  createUserWithEmailAndPassword, signInWithEmailAndPassword
-} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
-
-import {
-  getFirestore, doc, setDoc, addDoc,
-  collection, getDocs, query, where,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, addDoc, collection, getDocs, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
 /* ============================================================
    FIREBASE CONFIG
@@ -480,11 +468,9 @@ const firebaseConfig = {
   appId: "1:912547598774:web:28f3708a71561f3c62b117",
   measurementId: "G-TGGF3N8RTD"
 };
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-
 const provider = new GoogleAuthProvider();
 provider.setCustomParameters({ prompt: "select_account" });
 
@@ -503,17 +489,14 @@ googleBtn?.addEventListener("click", async () => {
   try {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
-
     await setDoc(doc(db, "usuarios", user.uid), {
       uid: user.uid,
       nombre: user.displayName,
       email: user.email,
       foto: user.photoURL
     }, { merge: true });
-
     cerrarModalAuth();
     showAlert(`¡Bienvenido ${user.displayName || user.email}!`, "#10b981");
-
   } catch (err) {
     if (err.code === "auth/popup-closed-by-user" || err.code === "auth/cancelled-popup-request") return;
     showAlert("Error al iniciar sesión con Google", "#dc2626");
@@ -525,25 +508,20 @@ googleBtn?.addEventListener("click", async () => {
 ============================================================ */
 registerForm?.addEventListener("submit", async e => {
   e.preventDefault();
-
   const nombre = regNombre.value.trim();
   const email = regEmail.value.trim();
   const pass = regPassword.value;
-
   try {
     const cred = await createUserWithEmailAndPassword(auth, email, pass);
     const user = cred.user;
-
     await setDoc(doc(db, "usuarios", user.uid), {
       uid: user.uid,
       nombre,
       email,
       foto: `https://ui-avatars.com/api/?name=${encodeURIComponent(nombre)}&background=random`
     });
-
     cerrarModalAuth();
-    showAlert("Registro exitoso ✓ Bienvenido", "#10b981");
-
+    showAlert(`Registro exitoso ✓ Bienvenido ${nombre}`, "#10b981");
   } catch (err) {
     showAlert("Error en registro: " + err.message, "#dc2626");
   }
@@ -577,42 +555,32 @@ function cerrarModalAuth() {
 function pintarUsuarioNavbar(user) {
   const foto = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}`;
   const nombre = user.displayName || user.email;
-
   limpiarUsuarioNavbar();
 
   const li = document.createElement("li");
   li.className = "nav-item dropdown ms-3 d-flex align-items-center";
   li.id = "userinfo";
-
   li.innerHTML = `
     <button class="btn btn-link position-relative me-3 text-white" id="btnCarritoIcono">
       <i class="bi bi-cart3 fs-5 text-white"></i>
       <span id="contadorCarrito" class="badge rounded-pill bg-danger position-absolute top-0 start-100 translate-middle">0</span>
     </button>
-
-    <a class="nav-link dropdown-toggle d-flex align-items-center"
-       href="#"
-       role="button"
-       data-bs-toggle="dropdown"
-       aria-expanded="false">
+    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
       <img src="${foto}" class="rounded-circle me-2" width="32" height="32">
       <span class="text-white">${nombre}</span>
     </a>
-
     <ul class="dropdown-menu dropdown-menu-end">
       <li><a class="dropdown-item" id="misPedidosBtn">Mis pedidos</a></li>
       <li><hr class="dropdown-divider"></li>
       <li><a class="dropdown-item text-danger" id="cerrarSesionBtn">Cerrar sesión</a></li>
     </ul>
   `;
-
   document.querySelector(".navbar-nav").appendChild(li);
 
   document.getElementById("cerrarSesionBtn").addEventListener("click", async () => {
     await signOut(auth);
     showAlert("Sesión cerrada", "#4f46e5");
   });
-
   document.getElementById("misPedidosBtn").addEventListener("click", cargarPedidosUsuario);
 }
 
@@ -700,11 +668,9 @@ function renderCarrito() {
         <button class="btn btn-sm btn-danger btn-eliminar"><i class="bi bi-trash"></i></button>
       </div>
     `;
-
     row.querySelector(".btn-restar").addEventListener("click", () => cambiarCantidad(index, -1));
     row.querySelector(".btn-sumar").addEventListener("click", () => cambiarCantidad(index, 1));
     row.querySelector(".btn-eliminar").addEventListener("click", () => eliminarItem(index));
-
     lista.appendChild(row);
   });
 
@@ -727,8 +693,7 @@ function eliminarItem(index) {
 document.addEventListener("click", e => {
   if (e.target.closest("#btnCarritoIcono")) {
     renderCarrito();
-    const modal = new bootstrap.Modal(document.getElementById("modalCarrito"));
-    modal.show();
+    new bootstrap.Modal(document.getElementById("modalCarrito")).show();
   }
 });
 
@@ -738,16 +703,13 @@ document.querySelectorAll(".addToCart").forEach(btn => {
       new bootstrap.Modal(document.getElementById("authModal")).show();
       return;
     }
-
     const card = e.target.closest(".card");
-    const nombre = card.querySelector(".card-title").textContent.trim();
-    const precio = parseFloat(card.querySelector(".fw-bold").textContent.replace("S/", "").trim());
+    const nombre = card.querySelector(".card-title").textContent;
+    const precio = parseFloat(card.querySelector(".fw-bold").textContent.replace("S/",""));
     const img = card.querySelector("img").src;
-
     const existe = carrito.find(p => p.nombre === nombre);
     if (existe) existe.cantidad++;
     else carrito.push({ nombre, precio, img, cantidad: 1 });
-
     guardarCarrito();
     mostrarAlerta(nombre);
   });
@@ -763,32 +725,24 @@ document.getElementById("btnComprar")?.addEventListener("click", async () => {
     new bootstrap.Modal(document.getElementById("authModal")).show();
     return;
   }
-
   if (carrito.length === 0) {
     showAlert("El carrito está vacío", "#dc2626");
     return;
   }
-
   try {
     const uid = auth.currentUser.uid;
-    const totalPedido = carrito.reduce((acc, i) => acc + i.precio * i.cantidad, 0);
-
     await addDoc(collection(db, "Pedidos"), {
       uid,
       items: carrito,
-      total: totalPedido,
+      total: carrito.reduce((acc, i) => acc + i.precio * i.cantidad, 0),
       createdAt: serverTimestamp()
     });
-
     carrito = [];
     guardarCarrito();
     renderCarrito();
-
     const modal = bootstrap.Modal.getInstance(document.getElementById("modalCarrito"));
     if (modal) modal.hide();
-
-    showAlert(`Pedido registrado correctamente. Total: S/ ${totalPedido.toFixed(2)}`, "#10b981");
-
+    showAlert("Pedido registrado correctamente", "#10b981");
   } catch (err) {
     showAlert("Error al guardar tu pedido", "#dc2626");
   }
@@ -803,31 +757,24 @@ async function cargarPedidosUsuario() {
     new bootstrap.Modal(document.getElementById("authModal")).show();
     return;
   }
-
   const lista = document.getElementById("listaPedidos");
   lista.innerHTML = `<p class="text-center">Cargando pedidos...</p>`;
-
   try {
     const q = query(collection(db, "Pedidos"), where("uid", "==", user.uid));
     const snap = await getDocs(q);
     const pedidos = [];
     snap.forEach(doc => pedidos.push({ id: doc.id, ...doc.data() }));
-
     pedidos.sort((a, b) => {
       const fa = a.createdAt?.toMillis ? a.createdAt.toMillis() : 0;
       const fb = b.createdAt?.toMillis ? b.createdAt.toMillis() : 0;
       return fb - fa;
     });
-
     if (pedidos.length === 0) {
       lista.innerHTML = `<p class="text-center">No tienes pedidos.</p>`;
     } else {
-      lista.innerHTML = pedidos.map((p, i) => renderPedidoHtml(p, i + 1)).join("");
+      lista.innerHTML = pedidos.map((p, index) => renderPedidoHtml(p, index + 1)).join("");
     }
-
-    const modal = new bootstrap.Modal(document.getElementById("modalPedidos"));
-    modal.show();
-
+    new bootstrap.Modal(document.getElementById("modalPedidos")).show();
   } catch (err) {
     lista.innerHTML = `<p class="text-center text-danger">Error al cargar pedidos</p>`;
   }
@@ -840,40 +787,36 @@ function renderPedidoHtml(p, numero) {
   const fecha = p.createdAt?.toDate ? p.createdAt.toDate().toLocaleString() : "Sin fecha";
   let itemsHtml = "";
   (p.items || []).forEach(i => {
-    const subtotal = i.precio * i.cantidad;
     itemsHtml += `
-      <div class="pedido-item d-flex justify-content-between align-items-center mb-2">
+      <div class="pedido-item">
         <div class="d-flex align-items-center">
-          <img src="${i.img}" width="50" class="me-2 rounded">
+          <img src="${i.img}">
           <div>
             <strong>${i.nombre}</strong><br>
             <small>Cantidad: ${i.cantidad}</small>
           </div>
         </div>
-        <div><strong>S/ ${subtotal.toFixed(2)}</strong></div>
+        <div><strong>S/ ${(i.precio * i.cantidad).toFixed(2)}</strong></div>
       </div>
     `;
   });
-
-  const total = p.total ?? (p.items?.reduce((acc, i) => acc + i.precio * i.cantidad, 0) || 0);
-
   return `
-    <div class="pedido-card mb-3 p-3 border rounded">
-      <div class="pedido-header fw-bold">Pedido #${numero}</div>
+    <div class="pedido-card">
+      <div class="pedido-header">Pedido #${numero}</div>
       <div><strong>Fecha:</strong> ${fecha}</div>
       <hr>
       ${itemsHtml}
-      <div class="text-end mt-2"><h5>Total: S/ ${total.toFixed(2)}</h5></div>
+      <div class="text-end mt-2"><h5>Total: S/ ${p.total?.toFixed(2)}</h5></div>
     </div>
   `;
 }
-
 </script>
 
 
 
 </body>
 </html>
+
 
 
 
