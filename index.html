@@ -432,6 +432,7 @@
 <!-- BOOTSTRAP JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
+
 <script type="module">
 
 /* ============================================================
@@ -527,7 +528,7 @@ registerForm?.addEventListener("submit", async e => {
       email,
       foto: `https://ui-avatars.com/api/?name=${encodeURIComponent(nombre)}&background=random`
     });
-    cerrarModalAuth(); // Cierra modal al registrarse
+    cerrarModalAuth();
     showAlert(`¡Registro exitoso! Bienvenido ${nombre}`, "#10b981");
   } catch (err) {
     showAlert("Error en registro: " + err.message, "#dc2626");
@@ -542,7 +543,7 @@ loginForm?.addEventListener("submit", async e => {
   try {
     const cred = await signInWithEmailAndPassword(auth, loginEmail.value.trim(), loginPassword.value.trim());
     const user = cred.user;
-    cerrarModalAuth(); // Cierra modal al loguearse
+    cerrarModalAuth();
     showAlert(`¡Bienvenido ${user.email}!`, "#10b981");
   } catch (err) {
     showAlert("Error al iniciar sesión: " + err.message, "#dc2626");
@@ -584,11 +585,20 @@ function pintarUsuarioNavbar(user) {
     </ul>
   `;
   document.querySelector(".navbar-nav").appendChild(li);
+
+  // EVENTOS DEL NAVBAR SOLO SI HAY USUARIO
   document.getElementById("cerrarSesionBtn").addEventListener("click", async () => {
     await signOut(auth);
     showAlert("Sesión cerrada", "#4f46e5");
   });
   document.getElementById("misPedidosBtn").addEventListener("click", cargarPedidosUsuario);
+
+  // EVENTO CARRITO SOLO SI HAY USUARIO
+  const btnCarrito = document.getElementById("btnCarritoIcono");
+  btnCarrito.addEventListener("click", () => {
+    renderCarrito();
+    new bootstrap.Modal(document.getElementById("modalCarrito")).show();
+  });
 }
 
 function limpiarUsuarioNavbar() {
@@ -674,13 +684,6 @@ function eliminarItem(index) {
   guardarCarrito();
   renderCarrito();
 }
-
-document.addEventListener("click", e => {
-  if (e.target.closest("#btnCarritoIcono")) {
-    renderCarrito();
-    new bootstrap.Modal(document.getElementById("modalCarrito")).show();
-  }
-});
 
 document.querySelectorAll(".addToCart").forEach(btn => {
   btn.addEventListener("click", e => {
@@ -790,9 +793,9 @@ function renderPedidoHtml(p, numero) {
 
 
 
-
 </body>
 </html>
+
 
 
 
