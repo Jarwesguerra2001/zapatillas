@@ -132,13 +132,32 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
+  .toast-alert {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 3000;
+  background: #0d6efd;
+  color: white;
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0,0,0,.18);
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: all .4s ease;
+}
+.toast-alert.show {
+  opacity: 1;
+  transform: translateY(0);
+}
 
   </style>
 </head>
 
 <body>
 
-<div id="alertaAgregado" class="alert alert-success">Producto gregado al carrito</div>
+<div id="alertaAgregado" class="toast-alert">Producto agregado al carrito</div>
 
 <!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -574,11 +593,14 @@ onAuthStateChanged(auth, user => {
    ============================================================ */
 let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
-function mostrarAlerta() {
+function mostrarAlerta(nombreProducto = "") {
   const al = document.getElementById("alertaAgregado");
   if (!al) return;
-  al.style.display = "block";
-  setTimeout(() => al.style.display = "none", 1600);
+
+  al.textContent = `${nombreProducto} agregado al carrito`;
+
+  al.classList.add("show");
+  setTimeout(() => al.classList.remove("show"), 1800);
 }
 
 function guardarCarrito() {
@@ -829,6 +851,7 @@ function renderPedidoHtml(p, numero) {
 
 </body>
 </html>
+
 
 
 
