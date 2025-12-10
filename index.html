@@ -434,6 +434,7 @@
 
 <!-- FIREBASE COMPLETO -->
 <!-- FIREBASE COMPLETO -->
+<!-- FIREBASE COMPLETO CORREGIDO -->
 <script type="module">
 
 /* ============================================================
@@ -470,7 +471,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
 /* ============================================================
-   FIREBASE CONFIG OK
+   FIREBASE CONFIG
    ============================================================ */
 const firebaseConfig = {
   apiKey: "AIzaSyDBM97jFiC31LlofM_YOJY2l20YqAkxYWc",
@@ -498,7 +499,7 @@ const registerForm = document.getElementById("formRegister");
 const loginItem = document.getElementById("loginItem");
 
 /* ============================================================
-   LOGIN GOOGLE — CORREGIDO (SIN ERROR FALSO)
+   LOGIN GOOGLE
    ============================================================ */
 googleBtn?.addEventListener("click", async () => {
   try {
@@ -526,7 +527,7 @@ googleBtn?.addEventListener("click", async () => {
 });
 
 /* ============================================================
-   REGISTRO — YA CIERRA MODAL + ALERTA BONITA
+   REGISTRO
    ============================================================ */
 registerForm?.addEventListener("submit", async e => {
   e.preventDefault();
@@ -556,7 +557,7 @@ registerForm?.addEventListener("submit", async e => {
 });
 
 /* ============================================================
-   LOGIN EMAIL — YA MUESTRA ALERTA + CIERRA MODAL
+   LOGIN EMAIL
    ============================================================ */
 loginForm?.addEventListener("submit", async e => {
   e.preventDefault();
@@ -580,7 +581,7 @@ function cerrarModalAuth() {
 }
 
 /* ============================================================
-   NAVBAR — AHORA SIEMPRE CARGA DROPDOWN CORRECTO
+   NAVBAR
    ============================================================ */
 function pintarUsuarioNavbar(user) {
   const foto = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}`;
@@ -640,9 +641,8 @@ onAuthStateChanged(auth, user => {
 });
 
 /* ============================================================
-   CARRITO - (sin cambios importantes)
+   CARRITO
    ============================================================ */
-
 let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
 function mostrarAlerta(nombreProducto = "") {
@@ -756,8 +756,8 @@ document.querySelectorAll(".addToCart").forEach(btn => {
     }
 
     const card = e.target.closest(".card");
-    const nombre = card.querySelector(".card-title").textContent;
-    const precio = parseFloat(card.querySelector(".fw-bold").textContent.replace("S/",""));
+    const nombre = card.querySelector(".card-title").textContent.trim();
+    const precio = parseFloat(card.querySelector(".fw-bold").textContent.replace("S/", "").trim());
     const img = card.querySelector("img").src;
 
     const existe = carrito.find(p => p.nombre === nombre);
@@ -773,7 +773,7 @@ document.querySelectorAll(".addToCart").forEach(btn => {
 actualizarContador();
 
 /* ============================================================
-   HACER PEDIDO — CON ALERTA BONITA
+   HACER PEDIDO
    ============================================================ */
 document.getElementById("btnComprar")?.addEventListener("click", async () => {
   if (!auth.currentUser) {
@@ -788,11 +788,12 @@ document.getElementById("btnComprar")?.addEventListener("click", async () => {
 
   try {
     const uid = auth.currentUser.uid;
+    const totalPedido = carrito.reduce((acc, i) => acc + (i.precio * i.cantidad), 0);
 
     await addDoc(collection(db, "Pedidos"), {
       uid,
       items: carrito,
-      total: carrito.reduce((acc, i) => acc + i.precio * i.cantidad, 0),
+      total: totalPedido,
       createdAt: serverTimestamp()
     });
 
@@ -803,7 +804,7 @@ document.getElementById("btnComprar")?.addEventListener("click", async () => {
     const modal = bootstrap.Modal.getInstance(document.getElementById("modalCarrito"));
     if (modal) modal.hide();
 
-    showAlert("Pedido registrado correctamente", "#10b981");
+    showAlert(`Pedido registrado correctamente. Total: S/ ${totalPedido.toFixed(2)}`, "#10b981");
 
   } catch (err) {
     showAlert("Error al guardar tu pedido", "#dc2626");
@@ -864,27 +865,30 @@ function renderPedidoHtml(p, numero) {
 
   let itemsHtml = "";
   (p.items || []).forEach(i => {
+    const subtotal = i.precio * i.cantidad;
     itemsHtml += `
-      <div class="pedido-item">
+      <div class="pedido-item d-flex justify-content-between align-items-center mb-2">
         <div class="d-flex align-items-center">
-          <img src="${i.img}">
+          <img src="${i.img}" width="50" class="me-2 rounded">
           <div>
             <strong>${i.nombre}</strong><br>
             <small>Cantidad: ${i.cantidad}</small>
           </div>
         </div>
-        <div><strong>S/ ${(i.precio * i.cantidad).toFixed(2)}</strong></div>
+        <div><strong>S/ ${subtotal.toFixed(2)}</strong></div>
       </div>
     `;
   });
 
+  const total = p.total ?? (p.items?.reduce((acc, i) => acc + (i.precio * i.cantidad), 0) || 0);
+
   return `
-    <div class="pedido-card">
-      <div class="pedido-header">Pedido #${numero}</div>
+    <div class="pedido-card mb-3 p-3 border rounded">
+      <div class="pedido-header fw-bold">Pedido #${numero}</div>
       <div><strong>Fecha:</strong> ${fecha}</div>
       <hr>
       ${itemsHtml}
-      <div class="text-end mt-2"><h5>Total: S/ ${p.total?.toFixed(2)}</h5></div>
+      <div class="text-end mt-2"><h5>Total: S/ ${total.toFixed(2)}</h5></div>
     </div>
   `;
 }
@@ -895,6 +899,7 @@ function renderPedidoHtml(p, numero) {
 
 </body>
 </html>
+
 
 
 
