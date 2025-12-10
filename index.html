@@ -527,9 +527,15 @@ loginForm?.addEventListener("submit", async e => {
     await signInWithEmailAndPassword(auth, loginEmail.value.trim(), loginPassword.value.trim());
     cerrarModalAuth();
     showAlert("¡Bienvenido " + loginEmail.value + "!");
-  } catch (err) {
-    alert("Usuario o contraseña incorrecta");
+} catch (err) {
+  console.warn("Advertencia en Google Login:", err.message);
+
+  // ❗ Evita mostrar error falso por popup cancelado
+  if (err.code !== "auth/popup-closed-by-user" &&
+      err.code !== "auth/cancelled-popup-request") {
+    showAlert("No se pudo iniciar sesión con Google", "#dc2626"); // rojo
   }
+}
 });
 
 /* ============================================================
@@ -866,6 +872,7 @@ function renderPedidoHtml(p, numero) {
 
 </body>
 </html>
+
 
 
 
