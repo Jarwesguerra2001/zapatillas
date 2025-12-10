@@ -431,6 +431,7 @@
 
 <!-- BOOTSTRAP JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 <script type="module">
 
 /* ============================================================
@@ -478,6 +479,17 @@ const loginItem = document.getElementById("loginItem");
 let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
 /* ============================================================
+   ALERTA CARRITO
+   ============================================================ */
+function mostrarAlerta(nombreProducto = "") {
+  const al = document.getElementById("alertaAgregado");
+  if (!al) return;
+  al.textContent = `${nombreProducto} agregado al carrito`;
+  al.classList.add("show");
+  setTimeout(() => al.classList.remove("show"), 1800);
+}
+
+/* ============================================================
    LOGIN GOOGLE
    ============================================================ */
 googleBtn?.addEventListener("click", async () => {
@@ -515,7 +527,7 @@ registerForm?.addEventListener("submit", async e => {
       email,
       foto: `https://ui-avatars.com/api/?name=${encodeURIComponent(nombre)}&background=random`
     });
-    cerrarModalAuth();
+    cerrarModalAuth(); // Cierra modal al registrarse
     showAlert(`¡Registro exitoso! Bienvenido ${nombre}`, "#10b981");
   } catch (err) {
     showAlert("Error en registro: " + err.message, "#dc2626");
@@ -530,7 +542,7 @@ loginForm?.addEventListener("submit", async e => {
   try {
     const cred = await signInWithEmailAndPassword(auth, loginEmail.value.trim(), loginPassword.value.trim());
     const user = cred.user;
-    cerrarModalAuth();
+    cerrarModalAuth(); // Cierra modal al loguearse
     showAlert(`¡Bienvenido ${user.email}!`, "#10b981");
   } catch (err) {
     showAlert("Error al iniciar sesión: " + err.message, "#dc2626");
@@ -781,6 +793,7 @@ function renderPedidoHtml(p, numero) {
 
 </body>
 </html>
+
 
 
 
